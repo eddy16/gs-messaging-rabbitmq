@@ -23,9 +23,20 @@ public class Runner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        System.out.println("CONFIRM::"+rabbitTemplate.isConfirmListener());
+        System.out.println("RETURN::"+rabbitTemplate.isReturnListener());
         System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend(Application.queueName, "Hello from RabbitMQ!");
-        receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        Thread.sleep(10000);
+        try {
+            rabbitTemplate.convertAndSend(Application.queueName, "Hello from RabbitMQ!");
+            //receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Thread.sleep(10000);
+        }
+        Thread.sleep(100000);
+
         context.close();
     }
 
